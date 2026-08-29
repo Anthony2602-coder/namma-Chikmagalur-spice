@@ -1,0 +1,48 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Order {{ order.order_number }} - Namma Chikmagaluru{% endblock %}
+
+{% block content %}
+<section class="container order-detail-page">
+    <h1>Order {{ order.order_number }}</h1>
+    <div class="order-status-track">
+        {% for status, label in order.STATUS_CHOICES %}
+        <div class="track-step {% if order.status == status %}active{% elif forloop.counter0 < 3 %}done{% endif %}">
+            <div class="track-dot"></div>
+            <span>{{ label }}</span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="order-detail-grid">
+        <div class="order-items-list">
+            <h3>Items</h3>
+            {% for item in order.items.all %}
+            <div class="order-item-row">
+                <span>{{ item.product_name }} × {{ item.quantity }}</span>
+                <span>₹{{ item.subtotal }}</span>
+            </div>
+            {% endfor %}
+            <div class="summary-row"><span>Subtotal</span><span>₹{{ order.subtotal }}</span></div>
+            {% if order.discount %}<div class="summary-row"><span>Discount</span><span>-₹{{ order.discount }}</span></div>{% endif %}
+            <div class="summary-row"><span>Shipping</span><span>{% if order.shipping_fee %}₹{{ order.shipping_fee }}{% else %}FREE{% endif %}</span></div>
+            <div class="summary-row total"><span>Total</span><span>₹{{ order.total }}</span></div>
+        </div>
+        <div class="order-shipping-info">
+            <h3>Shipping To</h3>
+            <p><strong>{{ order.shipping_name }}</strong></p>
+            <p>{{ order.shipping_address }}</p>
+            <p>{{ order.shipping_city }}, {{ order.shipping_state }} - {{ order.shipping_pincode }}</p>
+            <p>📞 {{ order.shipping_phone }}</p>
+            <h3>Payment</h3>
+            <p>{{ order.get_payment_method_display }} · {{ order.payment_status|title }}</p>
+            {% if order.status == 'pending' or order.status == 'confirmed' %}
+            <form action="{% url 'shop:cancel_order' order.order_number %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline btn-sm" onclick="return confirm('Cancel this order?')">Cancel Order</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

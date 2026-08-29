@@ -1,0 +1,110 @@
+.install-body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    background: linear-gradient(135deg, #1a3009 0%, #2d5016 50%, #4a7c23 100%);
+    font-family: 'Poppins', sans-serif;
+}
+
+.install-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2.5rem;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.install-icon {
+    width: 96px;
+    height: 96px;
+    border-radius: 20px;
+    margin: 0 auto 1rem;
+}
+
+.pill {
+    display: inline-block;
+    background: #f0ebe3;
+    color: #2d5016;
+    padding: 0.3rem 1rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.install-card h1 {
+    font-family: 'Playfair Display', serif;
+    color: #2d5016;
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.install-card > p {
+    color: #6b5d4d;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.btn-download {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #2d5016, #4a7c23);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-family: inherit;
+}
+
+.btn-download:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(45,80,22,0.4);
+}
+
+.status {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: #6b5d4d;
+}
+
+.direct {
+    display: block;
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: #4a7c23;
+    word-break: break-all;
+}
+
+.back-link {
+    display: block;
+    margin-top: 1.5rem;
+    color: #2d5016;
+    font-weight: 600;
+}
+
+.help {
+    text-align: left;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f0ebe3;
+}
+
+.help h2 {
+    font-size: 1rem;
+    color: #2d5016;
+    margin-bottom: 0.75rem;
+}
+
+.help ol {
+    padding-left: 1.2rem;
+    color: #6b5d4d;
+    font-size: 0.9rem;
+    line-height: 1.8;
+}

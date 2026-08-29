@@ -1,0 +1,52 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Checkout - Namma Chikmagaluru{% endblock %}
+
+{% block content %}
+<section class="container checkout-page">
+    <h1>Checkout</h1>
+    <div class="checkout-layout">
+        <form method="post" class="checkout-form">
+            {% csrf_token %}
+            <div class="form-section">
+                <h3>Shipping Address</h3>
+                <div class="form-grid">
+                    <div class="form-group"><label>Full Name</label>{{ form.shipping_name }}</div>
+                    <div class="form-group"><label>Phone</label>{{ form.shipping_phone }}</div>
+                    <div class="form-group full"><label>Address</label>{{ form.shipping_address }}</div>
+                    <div class="form-group"><label>City</label>{{ form.shipping_city }}</div>
+                    <div class="form-group"><label>State</label>{{ form.shipping_state }}</div>
+                    <div class="form-group"><label>Pincode</label>{{ form.shipping_pincode }}</div>
+                </div>
+            </div>
+            <div class="form-section">
+                <h3>Payment Method</h3>
+                <div class="payment-options">{{ form.payment_method }}</div>
+            </div>
+            <div class="form-section">
+                <h3>Coupon Code</h3>
+                {{ form.coupon_code }}
+                <p class="hint">Try: CHIKMAGALURU10</p>
+            </div>
+            <div class="form-section">
+                <h3>Order Notes</h3>
+                {{ form.notes }}
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Place Order</button>
+        </form>
+
+        <div class="checkout-summary">
+            <h3>Your Order</h3>
+            {% for item in items %}
+            <div class="checkout-item">
+                <span>{{ item.product.name }} × {{ item.quantity }}</span>
+                <span>₹{{ item.subtotal }}</span>
+            </div>
+            {% endfor %}
+            <div class="summary-row"><span>Subtotal</span><span>₹{{ subtotal }}</span></div>
+            <div class="summary-row"><span>Shipping</span><span>{% if shipping %}₹{{ shipping }}{% else %}FREE{% endif %}</span></div>
+            <div class="summary-row total"><span>Total</span><span>₹{{ total }}</span></div>
+        </div>
+    </div>
+</section>
+{% endblock %}

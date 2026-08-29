@@ -1,0 +1,35 @@
+{% extends "shop/base.html" %}
+
+{% block title %}My Orders - Namma Chikmagaluru{% endblock %}
+
+{% block content %}
+<section class="container orders-page">
+    <h1>My Orders</h1>
+    {% for order in orders %}
+    <div class="order-card animate-on-scroll">
+        <div class="order-header">
+            <div>
+                <strong>{{ order.order_number }}</strong>
+                <span class="order-date">{{ order.created_at|date:"M d, Y h:i A" }}</span>
+            </div>
+            <span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span>
+        </div>
+        <div class="order-items-preview">
+            {% for item in order.items.all|slice:":3" %}
+            <span>{{ item.product_name }} × {{ item.quantity }}</span>
+            {% endfor %}
+        </div>
+        <div class="order-footer">
+            <span class="order-total">₹{{ order.total }}</span>
+            <a href="{% url 'shop:order_detail' order.order_number %}" class="btn btn-outline btn-sm">View Details</a>
+        </div>
+    </div>
+    {% empty %}
+    <div class="empty-state">
+        <div class="empty-icon">📦</div>
+        <h3>No orders yet</h3>
+        <a href="{% url 'shop:product_list' %}" class="btn btn-primary">Shop Now</a>
+    </div>
+    {% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Admin Dashboard - Namma Chikmagaluru{% endblock %}
+
+{% block content %}
+<section class="container admin-dashboard">
+    <div class="admin-header">
+        <h1>Admin Dashboard</h1>
+        <div class="admin-actions">
+            <a href="{% url 'shop:admin_product_add' %}" class="btn btn-primary btn-sm">+ Add Product</a>
+            <a href="/admin/" class="btn btn-outline btn-sm">Django Admin</a>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card animate-on-scroll">
+            <span class="stat-icon">📦</span>
+            <div><h3>{{ total_products }}</h3><p>Products</p></div>
+        </div>
+        <div class="stat-card animate-on-scroll">
+            <span class="stat-icon">🛒</span>
+            <div><h3>{{ total_orders }}</h3><p>Total Orders</p></div>
+        </div>
+        <div class="stat-card animate-on-scroll">
+            <span class="stat-icon">⏳</span>
+            <div><h3>{{ pending_orders }}</h3><p>Pending</p></div>
+        </div>
+        <div class="stat-card animate-on-scroll">
+            <span class="stat-icon">👥</span>
+            <div><h3>{{ total_users }}</h3><p>Users</p></div>
+        </div>
+    </div>
+
+    <div class="admin-grid">
+        <div class="admin-panel">
+            <h2>Recent Orders</h2>
+            <table class="admin-table">
+                <thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th></tr></thead>
+                <tbody>
+                {% for order in recent_orders %}
+                <tr>
+                    <td>{{ order.order_number }}</td>
+                    <td>{{ order.user.username }}</td>
+                    <td>₹{{ order.total }}</td>
+                    <td><span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="admin-panel">
+            <h2>Low Stock Alert</h2>
+            {% for product in low_stock %}
+            <div class="low-stock-item">
+                <span>{{ product.name }}</span>
+                <span class="stock-warning">{{ product.stock }} left</span>
+                <a href="{% url 'shop:admin_product_edit' product.pk %}">Edit</a>
+            </div>
+            {% empty %}
+            <p>All products well stocked ✅</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

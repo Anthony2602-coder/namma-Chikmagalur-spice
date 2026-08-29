@@ -1,0 +1,155 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-video-bg">
+        <div class="hero-gradient"></div>
+        <div class="floating-particles">
+            {% for i in "123456789012345678" %}
+            <span class="particle" style="--i: {{ forloop.counter }}"></span>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="hero-carousel" id="heroCarousel">
+        {% for banner in banners %}
+        <div class="hero-slide {% if forloop.first %}active{% endif %}" data-index="{{ forloop.counter0 }}">
+            <div class="container hero-slide-inner">
+                <div class="hero-text animate-fade-up">
+                    <span class="hero-tag">From the Coffee Land of India</span>
+                    <h1>{{ banner.title }}</h1>
+                    <p>{{ banner.subtitle }}</p>
+                    <div class="hero-actions">
+                        <a href="{{ banner.link|default:'/products/' }}" class="btn btn-primary">Shop Now</a>
+                        <a href="{% url 'shop:about' %}" class="btn btn-ghost">Our Story</a>
+                    </div>
+                </div>
+                <div class="hero-image animate-float">
+                    {% if banner.image %}
+                    <img src="{{ banner.image.url }}" alt="{{ banner.title }}">
+                    {% elif banner.image_url %}
+                    <img src="{{ banner.image_url }}" alt="{{ banner.title }}">
+                    {% else %}
+                    <img src="{% static 'images/hero-coffee.svg' %}" alt="{{ banner.title }}">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="hero-slide active">
+            <div class="container hero-slide-inner">
+                <div class="hero-text animate-fade-up">
+                    <span class="hero-tag">From the Coffee Land of India</span>
+                    <h1>Premium Coffee & Malabar Pepper</h1>
+                    <p>Fresh from Chikmagaluru hills to your doorstep</p>
+                    <a href="{% url 'shop:product_list' %}" class="btn btn-primary">Shop Now</a>
+                </div>
+                <div class="hero-image animate-float">
+                    <img src="{% static 'images/hero-coffee.svg' %}" alt="Coffee">
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="carousel-dots" id="carouselDots">
+            {% for banner in banners %}
+            <button class="dot {% if forloop.first %}active{% endif %}" data-index="{{ forloop.counter0 }}"></button>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="categories-section container">
+    <h2 class="section-title animate-on-scroll">Shop by Category</h2>
+    <div class="category-grid">
+        {% for cat in categories %}
+        <a href="{% url 'shop:category' cat.slug %}" class="category-card animate-on-scroll">
+            <div class="category-icon">{{ cat.icon }}</div>
+            <h3>{{ cat.name }}</h3>
+            <p>{{ cat.description|truncatewords:12 }}</p>
+            <span class="category-arrow">→</span>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="promo-banner animate-on-scroll">
+    <div class="container promo-inner">
+        <div class="promo-text">
+            <h2>🎁 Use code <strong>CHIKMAGALURU10</strong></h2>
+            <p>Get 10% off on orders above ₹299</p>
+        </div>
+        <a href="{% url 'shop:product_list' %}" class="btn btn-light">Grab the Deal</a>
+    </div>
+</section>
+
+{% if featured %}
+<section class="products-section container">
+    <div class="section-header">
+        <h2 class="section-title animate-on-scroll">Featured Products</h2>
+        <a href="{% url 'shop:product_list' %}" class="view-all">View All →</a>
+    </div>
+    <div class="product-grid">
+        {% for product in featured %}
+        {% include "shop/partials/product_card.html" %}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<section class="video-showcase animate-on-scroll">
+    <div class="container showcase-inner">
+        <div class="showcase-content">
+            <h2>The Chikmagaluru Experience</h2>
+            <p>Watch how our coffee and pepper journey from misty Western Ghats plantations to your cup and kitchen.</p>
+        </div>
+        <div class="showcase-visual">
+            <div class="animated-scene">
+                <div class="scene-layer mountains"></div>
+                <div class="scene-layer plantation"></div>
+                <div class="scene-layer steam"></div>
+                <div class="scene-icon coffee-bean">☕</div>
+                <div class="scene-icon pepper">🌶️</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if bestsellers %}
+<section class="products-section container bg-alt">
+    <div class="section-header">
+        <h2 class="section-title animate-on-scroll">Best Sellers</h2>
+    </div>
+    <div class="product-grid">
+        {% for product in bestsellers %}
+        {% include "shop/partials/product_card.html" %}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if new_arrivals %}
+<section class="products-section container">
+    <div class="section-header">
+        <h2 class="section-title animate-on-scroll">New Arrivals</h2>
+    </div>
+    <div class="product-grid">
+        {% for product in new_arrivals %}
+        {% include "shop/partials/product_card.html" %}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<section class="newsletter-section">
+    <div class="container newsletter-inner animate-on-scroll">
+        <h2>Stay Brewed In ☕</h2>
+        <p>Subscribe for exclusive offers and fresh harvest updates</p>
+        <form action="{% url 'shop:newsletter' %}" method="post" class="newsletter-form">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{% url 'shop:home' %}">
+            {{ newsletter_form.email }}
+            <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

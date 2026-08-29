@@ -1,0 +1,55 @@
+{% extends "shop/base.html" %}
+
+{% block title %}{% if category %}{{ category.name }}{% else %}Products{% endif %} - Namma Chikmagaluru{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>{% if category %}{{ category.icon }} {{ category.name }}{% else %}All Products{% endif %}</h1>
+        {% if q %}<p>Results for "{{ q }}"</p>{% endif %}
+    </div>
+</section>
+
+<section class="container shop-layout">
+    <aside class="shop-sidebar">
+        <h3>Categories</h3>
+        <ul class="category-list">
+            <li><a href="{% url 'shop:product_list' %}" class="{% if not category %}active{% endif %}">All</a></li>
+            {% for cat in categories %}
+            <li><a href="{% url 'shop:category' cat.slug %}" class="{% if category.slug == cat.slug %}active{% endif %}">{{ cat.icon }} {{ cat.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </aside>
+
+    <div class="shop-main">
+        <div class="shop-toolbar">
+            <span>{{ products|length }} product{{ products|length|pluralize }}</span>
+            <form method="get" class="sort-form">
+                {% if q %}<input type="hidden" name="q" value="{{ q }}">{% endif %}
+                <select name="sort" onchange="this.form.submit()" class="form-control">
+                    <option value="" {% if not sort %}selected{% endif %}>Featured</option>
+                    <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                    <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                    <option value="rating" {% if sort == 'rating' %}selected{% endif %}>Customer Rating</option>
+                    <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest</option>
+                </select>
+            </form>
+        </div>
+
+        {% if products %}
+        <div class="product-grid">
+            {% for product in products %}
+            {% include "shop/partials/product_card.html" %}
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <h3>No products found</h3>
+            <p>Try a different search or browse our categories.</p>
+            <a href="{% url 'shop:product_list' %}" class="btn btn-primary">Browse All</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Login - Namma Chikmagaluru{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+    <div class="auth-card animate-fade-up">
+        <div class="auth-header">
+            <span class="auth-icon">☕</span>
+            <h1>Welcome Back</h1>
+            <p>Login to your Namma Chikmagaluru account</p>
+        </div>
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+            {% endif %}
+            {% for field in form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}<span class="field-error">{{ field.errors.0 }}</span>{% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </form>
+        <p class="auth-footer">Don't have an account? <a href="{% url 'shop:signup' %}">Sign Up</a></p>
+        {% include "shop/partials/admin_test_note.html" %}
+    </div>
+</section>
+{% endblock %}

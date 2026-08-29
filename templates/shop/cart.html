@@ -1,0 +1,72 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Cart - Namma Chikmagaluru{% endblock %}
+
+{% block content %}
+<section class="container cart-page">
+    <h1>Shopping Cart</h1>
+    {% if items %}
+    <div class="cart-layout">
+        <div class="cart-items">
+            {% for item in items %}
+            <div class="cart-item animate-on-scroll">
+                <div class="cart-item-image">
+                    {% if item.product.display_image %}
+                    <img src="{{ item.product.display_image }}" alt="{{ item.product.name }}">
+                    {% else %}
+                    <div class="product-placeholder">{{ item.product.category.icon }}</div>
+                    {% endif %}
+                </div>
+                <div class="cart-item-info">
+                    <h3><a href="{% url 'shop:product_detail' item.product.slug %}">{{ item.product.name }}</a></h3>
+                    <p>{{ item.product.weight }}</p>
+                    <p class="cart-item-price">₹{{ item.product.price }}</p>
+                </div>
+                <div class="cart-item-qty">
+                    <form action="{% url 'shop:update_cart' item.id %}" method="post" class="inline-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="decrease">
+                        <button type="submit" class="qty-btn">−</button>
+                    </form>
+                    <span>{{ item.quantity }}</span>
+                    <form action="{% url 'shop:update_cart' item.id %}" method="post" class="inline-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="increase">
+                        <button type="submit" class="qty-btn">+</button>
+                    </form>
+                </div>
+                <div class="cart-item-subtotal">₹{{ item.subtotal }}</div>
+                <form action="{% url 'shop:update_cart' item.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="remove">
+                    <button type="submit" class="remove-btn" title="Remove">🗑️</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="cart-summary">
+            <h3>Order Summary</h3>
+            <div class="summary-row"><span>Subtotal</span><span>₹{{ subtotal }}</span></div>
+            <div class="summary-row"><span>Shipping</span><span>{% if shipping %}₹{{ shipping }}{% else %}FREE{% endif %}</span></div>
+            {% if subtotal < 499 and subtotal > 0 %}
+            <p class="shipping-note">Add ₹{{ 499|floatformat:0 }} more for free delivery!</p>
+            {% endif %}
+            <div class="summary-row total"><span>Total</span><span>₹{{ total }}</span></div>
+            {% if user.is_authenticated %}
+            <a href="{% url 'shop:checkout' %}" class="btn btn-primary btn-block">Proceed to Checkout</a>
+            {% else %}
+            <a href="{% url 'shop:login' %}?next={% url 'shop:checkout' %}" class="btn btn-primary btn-block">Login to Checkout</a>
+            {% endif %}
+            <a href="{% url 'shop:product_list' %}" class="btn btn-ghost btn-block">Continue Shopping</a>
+        </div>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">🛒</div>
+        <h3>Your cart is empty</h3>
+        <p>Discover our premium coffee and pepper collection.</p>
+        <a href="{% url 'shop:product_list' %}" class="btn btn-primary">Start Shopping</a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

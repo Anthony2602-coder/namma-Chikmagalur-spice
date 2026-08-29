@@ -1,0 +1,9 @@
+{
+  "appId": "com.nammachikmagaluru.shop",
+  "appName": "Namma Chikmagaluru",
+  "webDir": "app",
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
+  }
+}

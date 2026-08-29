@@ -1,0 +1,45 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}Install App - Namma Chikmagaluru{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/install.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="install-body" style="min-height:70vh">
+    <div class="install-card animate-fade-up">
+        <img src="{% static 'icons/icon-192.png' %}" alt="Namma Chikmagaluru" class="install-icon" onerror="this.style.display='none'">
+        <span class="pill">Free · Android · Direct Install</span>
+        <h1>Install Namma Chikmagaluru</h1>
+        <p>Download the APK and install using Android Package Installer</p>
+        <button type="button" id="downloadBtn" class="btn-download">Download APK</button>
+        <p id="status" class="status">Checking availability…</p>
+        <a id="directLink" class="direct" href="{% static 'namma-chikmagaluru.apk' %}">Direct link: namma-chikmagaluru.apk</a>
+        <a class="back-link" href="{% url 'shop:home' %}">← Back to store</a>
+        <div class="help">
+            <h2>How to install on Android</h2>
+            <ol>
+                <li>Tap <strong>Download APK</strong> above</li>
+                <li>Open <strong>Files → Downloads</strong></li>
+                <li>Tap <strong>namma-chikmagaluru.apk</strong></li>
+                <li>Tap <strong>Install</strong> when prompted by Package Installer</li>
+                <li>If blocked, enable <strong>Install unknown apps</strong> for your browser in Settings</li>
+            </ol>
+        </div>
+        <div class="help">
+            <h2>Install on iPhone / iPad</h2>
+            <ol>
+                <li>Open this site in Safari</li>
+                <li>Tap the Share button</li>
+                <li>Select <strong>Add to Home Screen</strong></li>
+            </ol>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/install.js' %}"></script>
+{% endblock %}

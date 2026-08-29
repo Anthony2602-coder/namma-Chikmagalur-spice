@@ -1,0 +1,67 @@
+{% extends "shop/base.html" %}
+
+{% block title %}My Profile - Namma Chikmagaluru{% endblock %}
+
+{% block content %}
+<section class="container profile-page">
+    <h1>My Account</h1>
+    <div class="profile-grid">
+        <div class="profile-sidebar">
+            <div class="profile-card">
+                <div class="profile-avatar">{{ user.first_name|first|default:user.username|first|upper }}</div>
+                <h3>{{ user.get_full_name|default:user.username }}</h3>
+                <p>{{ user.email }}</p>
+            </div>
+            <nav class="profile-nav">
+                <a href="{% url 'shop:profile' %}" class="active">Profile</a>
+                <a href="{% url 'shop:orders' %}">Orders</a>
+                <a href="{% url 'shop:wishlist' %}">Wishlist ({{ wishlist_count }})</a>
+                <a href="{% url 'shop:cart' %}">Cart</a>
+                {% if user.is_staff %}<a href="{% url 'shop:admin_dashboard' %}">Admin Dashboard</a>{% endif %}
+            </nav>
+        </div>
+        <div class="profile-main">
+            <div class="profile-section">
+                <div class="section-header-inline">
+                    <h2>Saved Addresses</h2>
+                    <a href="{% url 'shop:add_address' %}" class="btn btn-outline btn-sm">+ Add Address</a>
+                </div>
+                {% for address in addresses %}
+                <div class="address-card">
+                    <div>
+                        <strong>{{ address.full_name }}</strong>
+                        {% if address.is_default %}<span class="badge">Default</span>{% endif %}
+                        <p>{{ address.address_line1 }}, {{ address.city }}, {{ address.state }} - {{ address.pincode }}</p>
+                        <p>📞 {{ address.phone }}</p>
+                    </div>
+                    <div class="address-actions">
+                        <a href="{% url 'shop:edit_address' address.pk %}">Edit</a>
+                        <form action="{% url 'shop:delete_address' address.pk %}" method="post" class="inline-form">
+                            {% csrf_token %}
+                            <button type="submit" class="link-btn">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No saved addresses. <a href="{% url 'shop:add_address' %}">Add one</a></p>
+                {% endfor %}
+            </div>
+            <div class="profile-section">
+                <h2>Recent Orders</h2>
+                {% for order in orders %}
+                <div class="order-card-mini">
+                    <div>
+                        <strong>{{ order.order_number }}</strong>
+                        <span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span>
+                    </div>
+                    <div>₹{{ order.total }} · {{ order.created_at|date:"M d, Y" }}</div>
+                    <a href="{% url 'shop:order_detail' order.order_number %}">View →</a>
+                </div>
+                {% empty %}
+                <p>No orders yet. <a href="{% url 'shop:product_list' %}">Start shopping</a></p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
